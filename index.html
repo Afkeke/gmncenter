@@ -1,0 +1,953 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>GMN Center</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: botón VIP en la esquina superior izquierda del menú; logo grande a la izquierda y menú a la derecha; Videos con dos entradas; VIP con reproductor y anterior/siguiente. */
+:root {
+  --bg: #eaf3ff;
+  --surface: #ffffff;
+  --surface-2: #f3f8ff;
+  --ink: #0b1b3a;
+  --muted: #52618a;
+  --line: #c6d8f5;
+  --blue: #1565f0;
+  --blue-soft: #d9e8ff;
+  --yellow: #ffe81a;
+  --yellow-ink: #2b2300;
+  --outline: #0b1b3a;
+  --focus: #0b1b3a;
+  --glow: rgba(255, 196, 0, .75);
+  --glow-soft: rgba(21, 101, 240, .28);
+  --ok: #0e7a3d;
+  --bad: #b3261e;
+  --stage: #06102a;
+  --stage-ink: #eaf1ff;
+  --display: "Lilita One", "Arial Rounded MT Bold", "Trebuchet MS", system-ui, sans-serif;
+  --body: "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #07112a;
+    --surface: #0e1c40;
+    --surface-2: #0a1633;
+    --ink: #eaf1ff;
+    --muted: #9fb0d8;
+    --line: #223669;
+    --blue: #3d8bff;
+    --blue-soft: #14295a;
+    --outline: #01060f;
+    --focus: #ffe81a;
+    --glow: rgba(255, 232, 26, .6);
+    --glow-soft: rgba(61, 139, 255, .35);
+    --ok: #4cd98a;
+    --bad: #ff8a80;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #07112a;
+  --surface: #0e1c40;
+  --surface-2: #0a1633;
+  --ink: #eaf1ff;
+  --muted: #9fb0d8;
+  --line: #223669;
+  --blue: #3d8bff;
+  --blue-soft: #14295a;
+  --outline: #01060f;
+  --focus: #ffe81a;
+  --glow: rgba(255, 232, 26, .6);
+  --glow-soft: rgba(61, 139, 255, .35);
+  --ok: #4cd98a;
+  --bad: #ff8a80;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.5;
+  padding-block: 20px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 980px; margin: 0 auto; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; letter-spacing: .01em; text-wrap: balance; margin: 0; }
+img { display: block; }
+
+/* botones sticker */
+.btn {
+  font-family: var(--display);
+  font-size: 1.15rem;
+  line-height: 1.1;
+  color: #fff;
+  background: var(--blue);
+  border: 3px solid var(--outline);
+  border-radius: 14px;
+  padding: .7rem 1.15rem;
+  box-shadow: 0 4px 0 var(--outline);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  transition: transform .08s ease, box-shadow .08s ease;
+}
+.btn:hover { transform: translateY(-1px); box-shadow: 0 5px 0 var(--outline); }
+.btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--outline); }
+.btn:focus-visible, input:focus-visible, .zone:focus-visible, a:focus-visible, button:focus-visible {
+  outline: 3px solid var(--focus); outline-offset: 3px;
+}
+.btn[disabled] { opacity: .45; cursor: not-allowed; transform: none; box-shadow: 0 4px 0 var(--outline); }
+.btn--yellow { background: var(--yellow); color: var(--yellow-ink); }
+.btn--ghost { background: var(--surface); color: var(--ink); }
+.btn svg { width: 1em; height: 1em; flex: none; }
+.pill-count {
+  font-family: var(--body); font-weight: 800; font-size: .85rem;
+  background: var(--yellow); color: var(--yellow-ink);
+  border: 2px solid var(--outline); border-radius: 999px;
+  padding: .05rem .55rem; min-width: 1.8rem; text-align: center;
+}
+
+/* VIP con glow */
+.btn--vip {
+  background: var(--yellow); color: var(--yellow-ink);
+  box-shadow: 0 4px 0 var(--outline), 0 0 18px 3px var(--glow);
+  animation: glow 2.8s ease-in-out infinite;
+}
+.btn--vip:hover { box-shadow: 0 5px 0 var(--outline), 0 0 28px 8px var(--glow); }
+.btn--vip:active { box-shadow: 0 1px 0 var(--outline), 0 0 20px 4px var(--glow); }
+@keyframes glow {
+  0%, 100% { box-shadow: 0 4px 0 var(--outline), 0 0 14px 2px var(--glow); }
+  50% { box-shadow: 0 4px 0 var(--outline), 0 0 26px 7px var(--glow); }
+}
+.home-top { display: flex; justify-content: flex-start; padding-bottom: 6px; }
+
+/* inicio y menú VIP */
+.home { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 32px 48px; align-items: center; min-height: min(64vh, 520px); }
+.home__logo { position: relative; }
+.home__logo::before {
+  content: ""; position: absolute; inset: 8% 4%; border-radius: 50%;
+  background: radial-gradient(closest-side, var(--blue-soft), transparent 72%);
+  z-index: 0;
+}
+.home__logo img { position: relative; z-index: 1; width: 100%; height: auto; aspect-ratio: 900 / 440; }
+.menu { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.menu__label { font-weight: 800; font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.menu .btn { font-size: 1.6rem; padding: 1rem 1.3rem; justify-content: space-between; }
+.menu__hint { color: var(--muted); font-size: .95rem; margin: 4px 0 0; max-width: 36ch; }
+
+/* encabezado de sección */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-bottom: 20px; }
+.top img { height: 56px; width: auto; aspect-ratio: 900 / 440; }
+.top a.logo { display: inline-block; border-radius: 10px; }
+.page-title { font-size: clamp(2rem, 5vw, 2.8rem); margin: 8px 0 4px; }
+.page-sub { color: var(--muted); margin: 0 0 22px; max-width: 60ch; }
+
+/* videos: subir */
+.inputs { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
+.card { background: var(--surface); border: 2px solid var(--line); border-radius: 20px; padding: 20px; min-width: 0; }
+.card h2 { font-size: 1.35rem; margin-bottom: 4px; }
+.card p.note { color: var(--muted); font-size: .92rem; margin: 0 0 14px; }
+.zone {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 12px;
+  border: 3px dashed var(--blue); border-radius: 16px; background: var(--surface-2);
+  padding: 18px; cursor: pointer; transition: background .15s ease;
+}
+.zone.drag { background: var(--blue-soft); border-style: solid; }
+.zone img { height: 54px; width: auto; aspect-ratio: 900 / 440; }
+.zone strong { font-family: var(--display); font-weight: 400; font-size: 1.15rem; }
+.zone small { color: var(--muted); }
+form.link { display: flex; flex-direction: column; gap: 12px; }
+.field { display: flex; gap: 10px; flex-wrap: wrap; }
+.field input {
+  flex: 1 1 200px; min-width: 0;
+  font: inherit; color: var(--ink); background: var(--surface-2);
+  border: 3px solid var(--outline); border-radius: 14px; padding: .72rem .9rem;
+}
+.field input::placeholder { color: var(--muted); }
+.msg { margin: 16px 0 0; min-height: 1.5em; font-weight: 600; }
+.msg.ok { color: var(--ok); }
+.msg.bad { color: var(--bad); }
+.msg.info { color: var(--muted); }
+.saved { color: var(--muted); font-weight: 600; margin: 8px 0 0; }
+
+/* reproductor */
+.player { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 22px; align-items: start; }
+.player__main { min-width: 0; }
+.nowhead { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+.eyebrow { font-weight: 800; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.counter {
+  font-weight: 800; font-size: .9rem; font-variant-numeric: tabular-nums;
+  background: var(--yellow); color: var(--yellow-ink);
+  border: 2px solid var(--outline); border-radius: 999px; padding: .1rem .75rem;
+}
+.nowtitle { font-size: clamp(1.4rem, 3.6vw, 2.1rem); line-height: 1.15; margin: 0 0 14px; overflow-wrap: anywhere; }
+.stage {
+  aspect-ratio: 16 / 9; max-width: 100%;
+  background: var(--stage); color: var(--stage-ink);
+  border: 3px solid var(--outline); border-radius: 18px; overflow: hidden;
+  box-shadow: 0 6px 0 var(--outline), 0 0 36px 2px var(--glow-soft);
+  display: flex; align-items: center; justify-content: center;
+}
+.stage video { width: 100%; height: 100%; object-fit: contain; background: #000; }
+.stage.stage--card { aspect-ratio: auto; min-height: 220px; align-items: stretch; }
+.stage.stage--card .linkcard { justify-content: center; width: 100%; }
+.linkcard { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 22px; max-width: 100%; min-width: 0; }
+.linkcard .host { font-family: var(--display); font-size: clamp(1.3rem, 4vw, 1.9rem); overflow-wrap: anywhere; }
+.linkcard .url { opacity: .75; font-size: .9rem; overflow-wrap: anywhere; max-width: 60ch; }
+.linkcard .why { opacity: .75; font-size: .88rem; max-width: 52ch; margin: 0; }
+.controls { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 1fr); gap: 12px; margin-top: 20px; }
+.controls .btn { justify-content: center; }
+.btn--seen svg { width: 1.3em; height: 1.3em; }
+.hint { margin: 12px 2px 0; color: var(--muted); font-size: .9rem; }
+.plist { background: var(--surface); border: 2px solid var(--line); border-radius: 20px; padding: 14px; min-width: 0; }
+.plist__head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 0 4px 10px; }
+.plist__head h2 { font-size: 1.25rem; }
+.plist__head span { color: var(--muted); font-weight: 700; font-size: .9rem; }
+.plist__items { position: relative; display: flex; flex-direction: column; gap: 8px; max-height: 420px; overflow-y: auto; padding: 2px; }
+.pli {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; text-align: left;
+  font: inherit; color: var(--ink); background: var(--surface-2);
+  border: 2px solid var(--line); border-radius: 14px; padding: 8px 10px; cursor: pointer; width: 100%;
+}
+.pli:hover { border-color: var(--blue); }
+.pli.is-cur { border-color: var(--outline); background: var(--blue-soft); }
+.pli__n {
+  font-family: var(--display); font-size: .95rem; width: 30px; height: 30px; border-radius: 50%;
+  display: grid; place-items: center; background: var(--surface); border: 2px solid var(--line);
+}
+.pli.is-cur .pli__n { background: var(--yellow); color: var(--yellow-ink); border-color: var(--outline); }
+.pli__t { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.pli__k { font-weight: 800; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.empty {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 12px;
+  border: 3px dashed var(--line); border-radius: 20px; padding: 26px; background: var(--surface);
+}
+.empty img { height: 72px; width: auto; aspect-ratio: 900 / 440; }
+.empty p { margin: 0; color: var(--muted); max-width: 46ch; }
+
+.toast {
+  position: fixed; z-index: 40;
+  left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px));
+  margin-inline: auto; width: fit-content; max-width: 520px;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  display: flex; align-items: center; gap: 14px;
+  background: var(--surface); color: var(--ink);
+  border: 3px solid var(--outline); border-radius: 14px; padding: 10px 14px;
+  box-shadow: 0 4px 0 var(--outline);
+  font-weight: 700;
+}
+.toast__btn {
+  font: inherit; font-weight: 800; color: var(--yellow-ink); background: var(--yellow);
+  border: 2px solid var(--outline); border-radius: 10px; padding: .25rem .7rem; cursor: pointer;
+}
+
+/* recuadro de contraseña */
+.gate {
+  position: fixed; inset: 0; z-index: 50;
+  background: rgba(3, 8, 24, .62);
+  display: flex; align-items: center; justify-content: center;
+  padding-block: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.gate__box {
+  width: 100%; max-width: 400px; background: var(--surface); color: var(--ink);
+  border: 3px solid var(--outline); border-radius: 22px; padding: 22px;
+  box-shadow: 0 8px 0 var(--outline), 0 0 34px 6px var(--glow);
+  display: flex; flex-direction: column; gap: 14px;
+}
+.gate__box img { height: 64px; width: auto; aspect-ratio: 900 / 440; }
+.gate__box h2 { font-size: 1.6rem; }
+.gate__box p { margin: 0; color: var(--muted); font-size: .95rem; }
+.gate__box input {
+  font: inherit; color: var(--ink); background: var(--surface-2);
+  border: 3px solid var(--outline); border-radius: 14px; padding: .75rem .9rem; width: 100%;
+}
+.gate__row { display: flex; gap: 10px; flex-wrap: wrap; }
+.gate__err { min-height: 1.4em; color: var(--bad); font-weight: 800; margin: 0; }
+
+.stage iframe { width: 100%; height: 100%; border: 0; display: block; }
+.stage.stage--portrait { aspect-ratio: 9 / 16; width: min(100%, 405px, calc(68vh * 9 / 16)); min-width: min(100%, 300px); margin-inline: auto; }
+.stage.stage--audio { aspect-ratio: auto; height: 352px; }
+.orig { display: inline-block; margin: 10px 2px 0; font-weight: 800; color: var(--blue); }
+.menu .btn { font-size: 1.45rem; }
+
+@media (max-width: 760px) {
+  .home { grid-template-columns: minmax(0, 1fr); min-height: 0; padding-top: 8px; }
+  .inputs { grid-template-columns: minmax(0, 1fr); }
+  .player { grid-template-columns: minmax(0, 1fr); }
+  .controls { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .controls .btn--seen { grid-column: 1 / -1; order: -1; }
+  .plist__items { max-height: 280px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn, .zone { transition: none; }
+  .btn:hover, .btn:active { transform: none; }
+  .btn--vip { animation: none; }
+}
+</style>
+
+<div class="wrap">
+
+  <!-- INICIO -->
+  <section id="view-inicio" aria-label="Inicio">
+    <div class="home-top">
+      <button class="btn btn--vip" id="vipOpen" type="button">VIP Josue</button>
+    </div>
+    <div class="home">
+      <div class="home__logo"><img src="logo.png" alt="GMN Center" width="900" height="440"></div>
+      <nav class="menu" aria-label="Menú principal">
+        <span class="menu__label">Menú</span>
+        <a class="btn" href="#videos"><span>Videos</span></a>
+        <a class="btn" href="#musica"><span>Música</span></a>
+        <a class="btn" href="#reels"><span>Tiktoks/Reels</span></a>
+        <p class="menu__hint">Elige una sección para subir mp4 o pegar links.</p>
+      </nav>
+    </div>
+  </section>
+
+  <!-- AGREGAR (Videos, Música, Tiktoks/Reels) -->
+  <section id="view-add" aria-label="Agregar" hidden>
+    <div class="top">
+      <a class="logo" href="#inicio" aria-label="GMN Center, volver al menú"><img src="logo.png" alt="GMN Center" width="900" height="440"></a>
+      <a class="btn btn--ghost" href="#inicio">Menú</a>
+    </div>
+    <h1 class="page-title" id="addTitle"></h1>
+    <p class="page-sub" id="addSub"></p>
+
+    <div class="inputs">
+      <div class="card">
+        <h2>Subir un mp4</h2>
+        <p class="note">Solo archivos .mp4, hasta 20 MB cada uno.</p>
+        <div class="zone" id="zone" tabindex="0" role="button" aria-label="Elegir archivos mp4 o soltarlos aquí">
+          <img src="logo.png" alt="" width="900" height="440">
+          <strong>Suelta tus mp4 aquí</strong>
+          <small>o toca para elegirlos</small>
+        </div>
+        <input id="file" type="file" accept=".mp4,video/mp4" multiple hidden>
+      </div>
+      <div class="card">
+        <h2>Pegar un link</h2>
+        <p class="note" id="linkNote"></p>
+        <form class="link" id="linkForm" novalidate>
+          <div class="field">
+            <input id="linkInput" type="text" inputmode="url" autocomplete="off" spellcheck="false" aria-label="Link">
+            <button class="btn btn--yellow" id="linkBtn" type="submit">Agregar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <p class="saved" id="saved"></p>
+  </section>
+
+  <!-- VIP: menú -->
+  <section id="view-vip" aria-label="VIP Josue" hidden>
+    <div class="top">
+      <a class="logo" href="#inicio" aria-label="GMN Center, volver al menú"><img src="logo.png" alt="GMN Center" width="900" height="440"></a>
+      <a class="btn btn--ghost" href="#inicio">Salir</a>
+    </div>
+    <div class="home">
+      <div class="home__logo"><img src="logo.png" alt="" width="900" height="440"></div>
+      <nav class="menu" aria-label="Menú VIP">
+        <span class="menu__label">VIP Josue</span>
+        <a class="btn" href="#ver-videos"><span>Ver videos</span><span class="pill-count" data-count="videos">0</span></a>
+        <a class="btn" href="#ver-musica"><span>Ver música</span><span class="pill-count" data-count="musica">0</span></a>
+        <a class="btn" href="#ver-reels"><span>Ver Tiktoks/Reels</span><span class="pill-count" data-count="reels">0</span></a>
+        <p class="menu__hint">Elige qué quieres ver. Salta al siguiente, regresa o marca como visto con el ojo.</p>
+      </nav>
+    </div>
+  </section>
+
+  <!-- VIP: reproductor -->
+  <section id="view-player" aria-label="Reproductor" hidden>
+    <div class="top">
+      <a class="logo" href="#vip" aria-label="GMN Center, volver al menú VIP"><img src="logo.png" alt="GMN Center" width="900" height="440"></a>
+      <a class="btn btn--ghost" href="#vip">Menú VIP</a>
+    </div>
+
+    <div id="pl-empty" class="empty" hidden>
+      <img src="logo.png" alt="" width="900" height="440">
+      <p id="pl-empty-text"></p>
+      <a class="btn btn--yellow" id="pl-empty-link" href="#videos">Ir a Videos</a>
+    </div>
+
+    <div id="pl-main" class="player" hidden>
+      <div class="player__main">
+        <div class="nowhead">
+          <span class="eyebrow" id="eyebrow">Reproduciendo</span>
+          <span class="counter" id="plCounter"></span>
+        </div>
+        <h1 class="nowtitle" id="plTitle"></h1>
+        <div class="stage" id="stage"></div>
+        <div class="controls">
+          <button class="btn btn--ghost" id="prevBtn" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Anterior
+          </button>
+          <button class="btn btn--yellow btn--seen" id="seenBtn" type="button" aria-label="Ya lo vi: pasar al siguiente y quitar de la lista">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+            Visto
+          </button>
+          <button class="btn" id="nextBtn" type="button">
+            Siguiente
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <p class="hint">El ojo marca como visto: pasa al siguiente y se quita de la lista.</p>
+        <a class="orig" id="origLink" href="#" target="_blank" rel="noopener noreferrer" hidden>Abrir el link original en otra pestaña</a>
+      </div>
+      <aside class="plist" aria-label="Lista">
+        <div class="plist__head"><h2>Lista</h2><span id="plTotal"></span></div>
+        <div class="plist__items" id="plList"></div>
+      </aside>
+    </div>
+  </section>
+
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden>
+  <span id="toastText"></span>
+  <button class="toast__btn" id="toastUndo" type="button">Deshacer</button>
+</div>
+
+<!-- recuadro de contraseña -->
+<div class="gate" id="gate" hidden>
+  <form class="gate__box" id="gateForm" role="dialog" aria-modal="true" aria-labelledby="gateTitle" novalidate>
+    <img src="logo.png" alt="" width="900" height="440">
+    <h2 id="gateTitle">VIP Josue</h2>
+    <p>Escribe la contraseña para entrar.</p>
+    <input id="pw" type="password" autocomplete="off" aria-label="Contraseña" placeholder="Contraseña">
+    <p class="gate__err" id="gateErr" role="alert"></p>
+    <div class="gate__row">
+      <button class="btn btn--yellow" type="submit">Entrar</button>
+      <button class="btn btn--ghost" id="gateCancel" type="button">Cancelar</button>
+    </div>
+  </form>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var SALT = "e1e66e2140ea886a5a929b8d5fa95a58";
+  var HASH = "1f54c59b0acaa84105e838c825c9cd005283d172678fef04b0e057e1577178e5";
+  var ITER = 200000;
+  var MAX_BYTES = 20 * 1024 * 1024;
+  var UNDO_MS = 6000;
+
+  var SECTIONS = {
+    videos: { col: "videos", name: "Videos", hosts: null, hostsText: "", portrait: false,
+      sub: "Sube un mp4 o pega un link. YouTube se reconoce solo. Todo se guarda en la lista del reproductor VIP.",
+      linkNote: "Cualquier enlace http o https.", ph: "https://…" },
+    musica: { col: "musica", name: "Música", hosts: ["youtube", "spotify"], hostsText: "YouTube o Spotify", portrait: false,
+      sub: "Sube un mp4 o pega un link de YouTube o Spotify.",
+      linkNote: "Solo links de YouTube o Spotify.", ph: "Link de YouTube o Spotify" },
+    reels: { col: "reels", name: "Tiktoks/Reels", hosts: ["tiktok", "instagram"], hostsText: "TikTok o Instagram", portrait: true,
+      sub: "Sube un mp4 o pega un link de TikTok o Instagram.",
+      linkNote: "Solo links de TikTok o Instagram.", ph: "Link de TikTok o Instagram" }
+  };
+  var KEYS = ["videos", "musica", "reels"];
+  var ST = {};
+  KEYS.forEach(function (k) { ST[k] = { raw: [], items: [], hidden: {}, cur: 0, curId: null, loaded: false }; });
+
+  var db = null, assets = null;
+  var localSeq = 0, unlocked = false;
+  var addSec = "videos", playSec = "videos";
+  var pending = null, toastTimer = null, embedWatch = null, loadTimer = null;
+
+  function $(id) { return document.getElementById(id); }
+
+  /* ---------- vistas por hash ---------- */
+  function route() {
+    var h = (location.hash || "").replace("#", "");
+    var view = "inicio", m;
+    if (SECTIONS[h]) { view = "add"; addSec = h; }
+    else if (h === "vip") { view = "vip"; }
+    else if ((m = /^ver-(videos|musica|reels)$/.exec(h))) { view = "player"; playSec = m[1]; }
+    if ((view === "vip" || view === "player") && !unlocked) { location.hash = "inicio"; return; }
+    if (view !== "vip" && view !== "player") unlocked = false;
+    $("view-inicio").hidden = view !== "inicio";
+    $("view-add").hidden = view !== "add";
+    $("view-vip").hidden = view !== "vip";
+    $("view-player").hidden = view !== "player";
+    if (view === "add") renderAdd();
+    if (view === "player") renderPlayer(true); else clearStage();
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener("hashchange", route);
+
+  /* ---------- utilidades ---------- */
+  function hexToBytes(hex) {
+    var out = new Uint8Array(hex.length / 2);
+    for (var i = 0; i < out.length; i++) out[i] = parseInt(hex.substr(i * 2, 2), 16);
+    return out;
+  }
+  function bytesToHex(b) {
+    return Array.prototype.map.call(b, function (x) { return ("0" + x.toString(16)).slice(-2); }).join("");
+  }
+  function fmtBytes(n) {
+    if (n < 1024 * 1024) return Math.max(1, Math.round(n / 1024)) + " KB";
+    return (n / (1024 * 1024)).toFixed(1) + " MB";
+  }
+  function isDirectVideo(url) {
+    try { return /\.(mp4|webm|ogv|m4v|mov)$/i.test(new URL(url).pathname); } catch (e) { return false; }
+  }
+
+  /* ---------- avisos (siempre visibles, aunque la página sea larga) ---------- */
+  function showToast(text, withUndo, ms) {
+    $("toastText").textContent = text;
+    $("toastUndo").hidden = !withUndo;
+    $("toast").hidden = false;
+    clearTimeout(toastTimer);
+    if (!withUndo) toastTimer = setTimeout(hideToast, ms || 4500);
+  }
+  function hideToast() { $("toast").hidden = true; }
+
+  /* ---------- reconocer links ---------- */
+  function normalizeUrl(raw) {
+    var s = (raw || "").trim();
+    if (!s) return null;
+    if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(s)) s = "https://" + s;
+    try {
+      var u = new URL(s);
+      if (u.protocol !== "http:" && u.protocol !== "https:") return null;
+      if (u.hostname.indexOf(".") === -1) return null;
+      return u.href;
+    } catch (e) { return null; }
+  }
+  var PLATFORM_NAME = { youtube: "YouTube", spotify: "Spotify", tiktok: "TikTok", instagram: "Instagram" };
+  var SPOTIFY_KIND = { track: "canción", album: "álbum", playlist: "playlist", episode: "episodio", show: "podcast", artist: "artista" };
+
+  function parseLink(url) {
+    var u;
+    try { u = new URL(url); } catch (e) { return { platform: null, label: url, embed: null }; }
+    var host = u.hostname.toLowerCase().replace(/^www\./, "");
+    var path = u.pathname, m;
+    function ends(d) { return host === d || host.slice(-(d.length + 1)) === "." + d; }
+
+    if (ends("youtube.com") || host === "youtu.be" || ends("youtube-nocookie.com")) {
+      var id = null, shorts = false;
+      if (host === "youtu.be") { m = /^\/([\w-]{11})/.exec(path); id = m && m[1]; }
+      else if ((m = /^\/(shorts|embed|live|v)\/([\w-]{11})/.exec(path))) { id = m[2]; shorts = m[1] === "shorts"; }
+      else if (path === "/watch") { var v = u.searchParams.get("v"); if (v && /^[\w-]{11}$/.test(v)) id = v; }
+      var list = u.searchParams.get("list");
+      if (id) {
+        return { platform: "youtube", label: (shorts ? "YouTube Short" : "YouTube") + " · " + id,
+          embed: { src: "https://www.youtube-nocookie.com/embed/" + id + "?autoplay=1&rel=0&playsinline=1", kind: shorts ? "portrait" : "video" } };
+      }
+      if (list && /^[\w-]+$/.test(list)) {
+        return { platform: "youtube", label: "YouTube · lista",
+          embed: { src: "https://www.youtube-nocookie.com/embed/videoseries?list=" + list + "&autoplay=1", kind: "video" } };
+      }
+      return { platform: "youtube", label: "YouTube · " + host, embed: null };
+    }
+    if (ends("spotify.com") || host === "spotify.link") {
+      m = /\/(track|album|playlist|episode|show|artist)\/([A-Za-z0-9]+)/.exec(path);
+      if (m) return { platform: "spotify", label: "Spotify · " + SPOTIFY_KIND[m[1]],
+        embed: { src: "https://open.spotify.com/embed/" + m[1] + "/" + m[2], kind: "audio" } };
+      return { platform: "spotify", label: "Spotify · " + host, embed: null };
+    }
+    if (ends("tiktok.com")) {
+      m = /^\/@([^\/]+)\/video\/(\d+)/.exec(path);
+      if (m) return { platform: "tiktok", label: "TikTok · @" + m[1],
+        embed: { src: "https://www.tiktok.com/embed/v2/" + m[2], kind: "portrait" } };
+      return { platform: "tiktok", label: "TikTok · " + (/^v[mt]\./.test(host) ? "link corto" : host), embed: null };
+    }
+    if (ends("instagram.com") || host === "instagr.am") {
+      m = /\/(p|reel|reels|tv)\/([\w-]+)/.exec(path);
+      if (m) {
+        var t = m[1] === "reels" ? "reel" : m[1];
+        return { platform: "instagram", label: "Instagram · " + (t === "p" ? "publicación " : "reel ") + m[2],
+          embed: { src: "https://www.instagram.com/" + t + "/" + m[2] + "/embed", kind: "portrait" } };
+      }
+      return { platform: "instagram", label: "Instagram · " + host, embed: null };
+    }
+    return { platform: null, label: host, embed: null };
+  }
+  function keyOf(url) { var i = parseLink(url); return i.embed ? i.embed.src : url; }
+  function titleOf(it) {
+    if (it.kind === "file") return (it.name || "video.mp4").replace(/\.mp4$/i, "");
+    return parseLink(it.url).label;
+  }
+  function tagOf(it) {
+    if (it.kind === "file") return "mp4";
+    var p = parseLink(it.url).platform;
+    return p ? PLATFORM_NAME[p] : "link";
+  }
+
+  /* ---------- datos ---------- */
+  function applyItems(sec) {
+    var T = ST[sec];
+    T.items = T.raw.filter(function (x) { return !T.hidden[x.id]; });
+    onItems(sec);
+  }
+  function onItems(sec) {
+    KEYS.forEach(function (k) {
+      var n = ST[k].items.length;
+      Array.prototype.forEach.call(document.querySelectorAll('[data-count="' + k + '"]'), function (el) { el.textContent = String(n); });
+    });
+    if (!$("view-add").hidden && addSec === sec) renderAdd();
+    if (!$("view-player").hidden && playSec === sec) renderPlayer(false);
+  }
+  async function addEntry(sec, data) {
+    data.createdAt = Date.now();
+    if (db) {
+      await db.collection(SECTIONS[sec].col).add(data);
+    } else {
+      data.id = "local-" + (++localSeq);
+      ST[sec].raw.push(data);
+      applyItems(sec);
+    }
+  }
+  async function removeEntry(sec, item) {
+    try {
+      if (!item || !item.id) throw new Error("sin id");
+      if (db) { await db.collection(SECTIONS[sec].col).doc(item.id).delete(); }
+      else { ST[sec].raw = ST[sec].raw.filter(function (x) { return x.id !== item.id; }); applyItems(sec); }
+      if (item.assetId && assets) { try { await assets.delete(item.assetId); } catch (e) {} }
+    } catch (e) {
+      delete ST[sec].hidden[item.id];
+      applyItems(sec);
+      showToast("No se pudo quitar. Sigue en la lista.", false, 6000);
+    }
+  }
+
+  /* ---------- página de agregar ---------- */
+  function renderAdd() {
+    var S = SECTIONS[addSec], T = ST[addSec], n = T.items.length;
+    $("addTitle").textContent = S.name;
+    $("addSub").textContent = S.sub;
+    $("linkNote").textContent = S.linkNote;
+    $("linkInput").placeholder = S.ph;
+    $("saved").textContent = (!T.loaded && db) ? "Cargando la lista…"
+      : n === 0 ? "La lista de " + S.name + " está vacía."
+      : n === 1 ? "Hay 1 elemento en la lista de " + S.name + "."
+      : "Hay " + n + " elementos en la lista de " + S.name + ".";
+  }
+
+  $("linkForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    var sec = addSec, S = SECTIONS[sec];
+    var url = normalizeUrl($("linkInput").value);
+    if (!url) { showToast("Ese link no se ve bien. Pega la dirección completa.", false, 6000); return; }
+    var info = parseLink(url);
+    if (S.hosts && S.hosts.indexOf(info.platform) < 0) {
+      showToast("En " + S.name + " solo caben links de " + S.hostsText + ".", false, 6000);
+      return;
+    }
+    var key = keyOf(url);
+    var dup = ST[sec].raw.some(function (x) { return x.kind === "link" && keyOf(x.url) === key; });
+    if (dup) { showToast("Ese link ya está en la lista de " + S.name + ".", false, 5000); return; }
+    $("linkBtn").disabled = true;
+    try {
+      await addEntry(sec, { kind: "link", url: url });
+      $("linkInput").value = "";
+      showToast("Agregado a " + S.name + ": " + info.label, false, 4500);
+    } catch (err) {
+      showToast("No se pudo guardar el link (" + ((err && err.code) || "error") + "). Intenta otra vez.", false, 7000);
+    } finally {
+      $("linkBtn").disabled = false;
+    }
+  });
+
+  function isMp4(f) { return /\.mp4$/i.test(f.name) || f.type === "video/mp4"; }
+  async function handleFiles(fileList) {
+    var sec = addSec, S = SECTIONS[sec];
+    var files = Array.prototype.slice.call(fileList || []);
+    if (!files.length) return;
+    if (!assets) {
+      showToast("Subir archivos necesita permiso de editor en esta página. Los links sí funcionan.", false, 7000);
+      return;
+    }
+    var okCount = 0, problems = [];
+    for (var i = 0; i < files.length; i++) {
+      var f = files[i];
+      if (!isMp4(f)) { problems.push(f.name + " no es mp4"); continue; }
+      if (f.size > MAX_BYTES) { problems.push(f.name + " pesa " + fmtBytes(f.size) + " (máximo 20 MB)"); continue; }
+      showToast("Subiendo " + f.name + "…", false, 60000);
+      try {
+        var res = await assets.upload(f, { type: "video/mp4" });
+        await addEntry(sec, { kind: "file", name: f.name, size: f.size, assetId: res.id });
+        okCount++;
+      } catch (err) {
+        var code = err && err.code;
+        problems.push(f.name + (code === "too_large" ? " es demasiado grande" : code === "quota_or_state" ? ": se llenó el espacio de la página" : " no se pudo subir"));
+      }
+    }
+    if (problems.length) showToast((okCount ? okCount + " agregado(s) a " + S.name + ". " : "") + problems.join(". ") + ".", false, 8000);
+    else showToast(okCount === 1 ? "Agregado a " + S.name + "." : okCount + " agregados a " + S.name + ".", false, 4500);
+    $("file").value = "";
+  }
+  var zone = $("zone"), fileInput = $("file");
+  zone.addEventListener("click", function () { fileInput.click(); });
+  zone.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fileInput.click(); }
+  });
+  fileInput.addEventListener("change", function () { handleFiles(fileInput.files); });
+  ["dragenter", "dragover"].forEach(function (ev) {
+    zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.add("drag"); });
+  });
+  ["dragleave", "drop"].forEach(function (ev) {
+    zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.remove("drag"); });
+  });
+  zone.addEventListener("drop", function (e) { handleFiles(e.dataTransfer && e.dataTransfer.files); });
+
+  /* ---------- contraseña (solo se guarda un hash con sal) ---------- */
+  async function checkPass(pw) {
+    var key = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw), "PBKDF2", false, ["deriveBits"]);
+    var bits = await crypto.subtle.deriveBits({ name: "PBKDF2", salt: hexToBytes(SALT), iterations: ITER, hash: "SHA-256" }, key, 256);
+    return bytesToHex(new Uint8Array(bits)) === HASH;
+  }
+  function openGate() {
+    $("pw").value = "";
+    $("gateErr").textContent = "";
+    $("gate").hidden = false;
+    setTimeout(function () { $("pw").focus(); }, 0);
+  }
+  function closeGate() { $("gate").hidden = true; $("vipOpen").focus(); }
+  $("vipOpen").addEventListener("click", openGate);
+  $("gateCancel").addEventListener("click", closeGate);
+  $("gate").addEventListener("mousedown", function (e) { if (e.target === $("gate")) closeGate(); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !$("gate").hidden) closeGate();
+  });
+  $("gateForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    var btn = $("gateForm").querySelector("button[type=submit]");
+    btn.disabled = true;
+    $("gateErr").textContent = "";
+    var ok = false, failed = false;
+    try { ok = await checkPass($("pw").value); } catch (err) { failed = true; }
+    btn.disabled = false;
+    if (ok) {
+      unlocked = true;
+      $("gate").hidden = true;
+      location.hash = "vip";
+    } else if (failed) {
+      $("gateErr").textContent = "No se pudo verificar la contraseña. Recarga la página.";
+    } else {
+      $("gateErr").textContent = "Contraseña incorrecta.";
+      $("pw").select();
+    }
+  });
+
+  /* ---------- visto (ojo): pasa al siguiente y se quita ---------- */
+  function commitPending() {
+    if (!pending) return;
+    clearTimeout(pending.timer);
+    var p = pending;
+    pending = null;
+    hideToast();
+    removeEntry(p.sec, p.item);
+  }
+  function markSeen() {
+    var T = ST[playSec], it = T.items[T.cur];
+    if (!it) return;
+    commitPending();
+    T.hidden[it.id] = true;
+    pending = { sec: playSec, item: it, timer: setTimeout(commitPending, UNDO_MS) };
+    showToast("Quitado de la lista", true);
+    applyItems(playSec);
+    renderPlayer(true);
+  }
+  function undoSeen() {
+    if (!pending) return;
+    clearTimeout(pending.timer);
+    var sec = pending.sec, id = pending.item.id;
+    pending = null;
+    delete ST[sec].hidden[id];
+    hideToast();
+    applyItems(sec);
+    var k = ST[sec].items.findIndex(function (x) { return x.id === id; });
+    if (k >= 0) ST[sec].cur = k;
+    if (playSec === sec) renderPlayer(true);
+  }
+  $("seenBtn").addEventListener("click", markSeen);
+  $("toastUndo").addEventListener("click", undoSeen);
+
+  /* ---------- reproductor ---------- */
+  function clearStage() {
+    var st = $("stage");
+    embedWatch = null;
+    var v = st.querySelector("video");
+    if (v) { try { v.pause(); } catch (e) {} v.removeAttribute("src"); try { v.load(); } catch (e) {} }
+    st.textContent = "";
+    st.classList.remove("stage--card", "stage--portrait", "stage--audio");
+    KEYS.forEach(function (k) { ST[k].curId = null; });
+  }
+
+  function card(st, head, text, why, linkUrl) {
+    embedWatch = null;
+    st.textContent = "";
+    st.classList.remove("stage--portrait", "stage--audio");
+    st.classList.add("stage--card");
+    var c = document.createElement("div");
+    c.className = "linkcard";
+    var h = document.createElement("div");
+    h.className = "host"; h.textContent = head;
+    c.appendChild(h);
+    if (text) { var u = document.createElement("div"); u.className = "url"; u.textContent = text; c.appendChild(u); }
+    if (linkUrl) {
+      var a = document.createElement("a");
+      a.className = "btn btn--yellow";
+      a.href = linkUrl; a.target = "_blank"; a.rel = "noopener noreferrer";
+      a.textContent = "Abrir en otra pestaña";
+      c.appendChild(a);
+    }
+    if (why) { var w = document.createElement("p"); w.className = "why"; w.textContent = why; c.appendChild(w); }
+    st.appendChild(c);
+  }
+
+  function mountVideo(st, src, onFail) {
+    var v = document.createElement("video");
+    v.controls = true;
+    v.playsInline = true;
+    v.preload = "auto";
+    v.src = src;
+    v.addEventListener("ended", function () { if (ST[playSec].cur < ST[playSec].items.length - 1) go(1); });
+    v.addEventListener("error", function () { if (v.isConnected) onFail(); });
+    st.appendChild(v);
+    var p = v.play();
+    if (p && p.catch) p.catch(function () {});
+  }
+
+  /* Intenta mostrar el reproductor del sitio. Si la plataforma bloquea el marco, avisa y pone el botón. */
+  document.addEventListener("securitypolicyviolation", function (e) {
+    if (!embedWatch) return;
+    var d = e.effectiveDirective || e.violatedDirective || "";
+    if (!/^(frame-src|child-src)/.test(d)) return;
+    var w = embedWatch;
+    embedWatch = null;
+    w.fail();
+  });
+  function mountEmbed(st, info, it) {
+    var f = document.createElement("iframe");
+    f.src = info.embed.src;
+    f.title = info.label;
+    f.allow = "autoplay; encrypted-media; fullscreen; picture-in-picture; clipboard-write";
+    f.allowFullscreen = true;
+    f.referrerPolicy = "strict-origin-when-cross-origin";
+    if (info.embed.kind === "portrait") st.classList.add("stage--portrait");
+    if (info.embed.kind === "audio") st.classList.add("stage--audio");
+    embedWatch = { fail: function () {
+      card(st, info.label, it.url, "Esta página no deja mostrar " + PLATFORM_NAME[info.platform] + " aquí adentro. Ábrelo en otra pestaña.", it.url);
+    } };
+    st.appendChild(f);
+  }
+
+  function renderList() {
+    var T = ST[playSec], box = $("plList");
+    box.textContent = "";
+    $("plTotal").textContent = T.items.length === 1 ? "1 elemento" : T.items.length + " elementos";
+    T.items.forEach(function (it, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "pli" + (i === T.cur ? " is-cur" : "");
+      if (i === T.cur) b.setAttribute("aria-current", "true");
+      var n = document.createElement("span"); n.className = "pli__n"; n.textContent = String(i + 1);
+      var t = document.createElement("span"); t.className = "pli__t"; t.textContent = titleOf(it);
+      var k = document.createElement("span"); k.className = "pli__k"; k.textContent = tagOf(it);
+      b.appendChild(n); b.appendChild(t); b.appendChild(k);
+      b.addEventListener("click", function () { T.cur = i; renderPlayer(true); });
+      box.appendChild(b);
+    });
+    var c = box.querySelector(".is-cur");
+    if (c) box.scrollTop = Math.max(0, c.offsetTop - (box.clientHeight - c.offsetHeight) / 2);
+  }
+
+  function renderPlayer(force) {
+    var sec = playSec, S = SECTIONS[sec], T = ST[sec], n = T.items.length;
+    $("pl-empty").hidden = n > 0;
+    $("pl-main").hidden = n === 0;
+    $("eyebrow").textContent = "Reproduciendo · " + S.name;
+    if (n === 0) {
+      $("pl-empty-text").textContent = (T.loaded || !db)
+        ? "No hay nada en " + S.name + " todavía. Agrégalo desde su sección y aparece aquí."
+        : "Cargando…";
+      $("pl-empty-link").href = "#" + sec;
+      $("pl-empty-link").textContent = "Ir a " + S.name;
+      clearStage();
+      return;
+    }
+    if (T.cur >= n) T.cur = n - 1;
+    if (T.cur < 0) T.cur = 0;
+    var it = T.items[T.cur];
+    $("plCounter").textContent = (T.cur + 1) + " de " + n;
+    $("prevBtn").disabled = T.cur === 0;
+    $("nextBtn").disabled = T.cur === n - 1;
+    renderList();
+    if (!force && it.id === T.curId) return;
+
+    clearStage();
+    T.curId = it.id;
+    $("plTitle").textContent = titleOf(it);
+    var orig = $("origLink");
+    if (it.kind === "link") { orig.href = it.url; orig.hidden = false; } else { orig.hidden = true; }
+    var st = $("stage");
+
+    if (it.kind === "file" && it.assetId) {
+      if (S.portrait) st.classList.add("stage--portrait");
+      mountVideo(st, "/_blob/" + it.assetId, function () {
+        card(st, "No se pudo reproducir este archivo", "", "Puede que ya no exista o que su formato no sea compatible. Usa Siguiente para seguir, o el ojo para quitarlo.", "");
+      });
+      return;
+    }
+    var info = parseLink(it.url);
+    if (info.embed) {
+      mountEmbed(st, info, it);
+    } else if (isDirectVideo(it.url)) {
+      mountVideo(st, it.url, function () {
+        card(st, info.label, it.url, "Este sitio no deja cargar el video dentro de la página.", it.url);
+      });
+    } else {
+      card(st, info.label, it.url, "Este link no se puede mostrar dentro de la página. Ábrelo en otra pestaña.", it.url);
+    }
+  }
+
+  function go(d) {
+    var T = ST[playSec], next = T.cur + d;
+    if (next < 0 || next > T.items.length - 1) return;
+    T.cur = next;
+    renderPlayer(true);
+  }
+  $("prevBtn").addEventListener("click", function () { go(-1); });
+  $("nextBtn").addEventListener("click", function () { go(1); });
+
+  /* ---------- capacidades ---------- */
+  function subscribe(sec) {
+    db.collection(SECTIONS[sec].col).orderBy("createdAt", "asc").limit(500).onSnapshot(function (snap) {
+      var T = ST[sec];
+      // d.data() llega congelado: hay que copiarlo para poder ponerle el id
+      T.raw = snap.docs.map(function (d) { var o = Object.assign({}, d.data()); o.id = d.id; return o; })
+        .filter(function (o) { return typeof o.id === "string" && o.id.length > 0; });
+      if (!snap.metadata.fromCache) T.loaded = true;
+      if (KEYS.every(function (k) { return ST[k].loaded; })) clearTimeout(loadTimer);
+      applyItems(sec);
+    }, function () {
+      ST[sec].loaded = true;
+      showToast("No se pudo leer la lista de " + SECTIONS[sec].name + ". Recarga la página.", false, 8000);
+      applyItems(sec);
+    });
+  }
+  async function boot() {
+    route();
+    try { db = await window.claude.use("db"); } catch (e) { db = null; }
+    try { assets = await window.claude.use("assets"); } catch (e) { assets = null; }
+    if (!db) { KEYS.forEach(function (k) { ST[k].loaded = true; applyItems(k); }); return; }
+    loadTimer = setTimeout(function () {
+      showToast("Las listas tardan en responder. Si no aparecen, revisa tu conexión.", false, 6000);
+    }, 10000);
+    KEYS.forEach(subscribe);
+  }
+  boot();
+})();
+</script>
+
+</body></html>
